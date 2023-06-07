@@ -1,49 +1,65 @@
 import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, ImageBackground, TouchableWithoutFeedback, Keyboard } from "react-native";
 
 export const LoginScreen = () => {
-  const [mail, setMail] =useState('');
-  const [password, setPassword] =useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [mail, setMail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isShowPassword, setIsShowPassword] = useState(true);
 
   // const [fontsLoaded] = useFonts({
   //   'Roboto': require('../assets/fonts/Roboto.ttf'),
   // });
-
   // if (!fontsLoaded) {
   //   return null;
   // }
 
+const handleMail = (mail) => setMail(mail);
+const handlePassword = (password) => setPassword(password);
+const showPassword = () => {
+  return isShowPassword ? setIsShowPassword(false) : setIsShowPassword(true);
+};
 
+const userLogin = () => {
+  if (!mail || !password) {
+    alert('Please enter data!');
+  }
+  console.log(`mail: ${mail}; password: ${password}`);
+  return;
+}
+
+  
   return (
-    <View style={styles.container}>
-      <ImageBackground source={require('../assets/bg_image.jpg')} resizeMode="cover" style={styles.imageBg}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        </KeyboardAvoidingView>
-        <View style={styles.form}>
-          <View style={styles.formWrapper}>
-            <Text style={styles.formTitle}>Увійти</Text>
-            <TextInput placeholder={"Адреса електронної пошти"} placeholderTextColor={"#BDBDBD"} value={mail} inputMode={'email'} style={styles.inputText} />
-            <View>
-              <TextInput placeholder={"Пароль"} placeholderTextColor={"#BDBDBD"} value={password} style={styles.inputPassword} />
-              <TouchableOpacity activeOpacity={0.8} onPress={() => console.log("onPress")} style={styles.showPasswordInput}>
-                <Text style={styles.showPasswordText}>Показати</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground source={require('../assets/bg_image.jpg')} resizeMode="cover" style={styles.imageBg}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          </KeyboardAvoidingView>
+          <View style={styles.form}>
+            <View style={styles.formWrapper}>
+              <Text style={styles.formTitle}>Увійти</Text>
+              
+              <TextInput placeholder={"Адреса електронної пошти"} placeholderTextColor={"#BDBDBD"} value={mail} inputMode={'email'} onChangeText={handleMail} style={styles.inputText} />
+              <View>
+                <TextInput placeholder={"Пароль"} placeholderTextColor={"#BDBDBD"} value={password} onChangeText={handlePassword} style={styles.inputPassword} />
+                <TouchableOpacity activeOpacity={0.8} onPress={showPassword} style={styles.showPasswordInput}>
+                  <Text style={styles.showPasswordText}>{isShowPassword ? 'Показати' : 'Приховати'}</Text>
+                </TouchableOpacity>
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.formLoginButton}
+              >
+                <Text style={styles.buttonRegistrTitle} onPress={userLogin}>Увійти</Text>
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.8} onPress={() => console.log("onPress")}>
+                <Text style={styles.loginLinkText}>Немає акаунту? Зареєструватися</Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.formLoginButton}
-            >
-              <Text style={styles.buttonRegistrTitle}>Увійти</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => console.log("onPress")}>
-              <Text style={styles.loginLinkText}>Немає акаунту? Зареєструватися</Text>
-            </TouchableOpacity>
           </View>
-        </View>
-      </ImageBackground>
-    </View >
+        </ImageBackground>
+      </View >
+    </TouchableWithoutFeedback>
   )
 }
 

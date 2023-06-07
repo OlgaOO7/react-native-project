@@ -1,63 +1,79 @@
 import { AntDesign } from '@expo/vector-icons';
 // import { useFonts } from 'expo-font';
 import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, ImageBackground } from "react-native";
+import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, ImageBackground, TouchableWithoutFeedback, Keyboard, Button } from "react-native";
 // import { PlusCircled } from "@radix-ui/react-icons";
 
 export const RegistrationScreen = () => {
   const [login, setLogin] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(true);
+  const [isShowPassword, setIsShowPassword] = useState(true);
 
   // const [fontsLoaded] = useFonts({
   //   'Roboto': require('../assets/fonts/Roboto.ttf'),
   // });
-
   // if (!fontsLoaded) {
   //   return null;
   // }
-
+  const handleLogin = (login) => setLogin(login);
+  const handleEmail = (email) => setEmail(email);
+  const handlePassword = (password) => setPassword(password);
+  const showPassword = () => {
+    return isShowPassword ? setIsShowPassword(false) : setIsShowPassword(true);
+  };
+  const userRegister = () => {
+    if (!login || !email || !password) {
+      alert('Please enter data!');
+    }
+    console.log(`login: ${login}; email: ${email}; password: ${password}`);
+    return;
+  }
 
   return (
-    <View style={styles.container}>
-      <ImageBackground source={require('../assets/bg_image.jpg')} resizeMode="cover" style={styles.imageBg}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-        </KeyboardAvoidingView>
-        <View style={styles.form}>
-          <View style={styles.formWrapper}>
-            <View style={styles.imageContainer}>
-              <TouchableHighlight>
-                {/* <Image source={require("../assets/add-photo_registr.png")} /> */}
-                <AntDesign name="pluscircleo" size={25} color="#FF6C00" style={styles.addIcon} />
-              </TouchableHighlight>
-              {/* <View> */}
-              {/* <PlusCircled /> */}
-              {/* </View> */}
-            </View>
-            <Text style={styles.formTitle}>Реєстрація</Text>
-            <TextInput placeholder={"Логін"} placeholderTextColor={"#BDBDBD"} value={login} inputMode={'text'} style={styles.inputText} />
-            <TextInput placeholder={"Адреса електронної пошти"} placeholderTextColor={"#BDBDBD"} value={email} inputMode={'email'} style={styles.inputText} />
-            <View>
-              <TextInput placeholder={"Пароль"} placeholderTextColor={"#BDBDBD"} value={password} style={styles.inputPassword} />
-              <TouchableOpacity activeOpacity={0.8} onPress={() => console.log("onPress")} style={styles.showPasswordInput}>
-                <Text style={styles.showPasswordText}>Показати</Text>
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.8}
-              style={styles.formRegistrButton}
-            >
-              <Text style={styles.buttonRegistrTitle}>Зареєструватись</Text>
-            </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => console.log("onPress")}>
-              <Text style={styles.loginLinkText}>Вже є аккаунт? Увійти</Text>
-            </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <ImageBackground source={require('../assets/bg_image.jpg')} resizeMode="cover" style={styles.imageBg}>
+          <View style={styles.form}>
+            <KeyboardAvoidingView
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+              <View style={styles.formWrapper}>
+                <View style={styles.imageContainer}>
+                  <TouchableHighlight>
+                    {/* <Image source={require("../assets/add-photo_registr.png")} /> */}
+                    <AntDesign name="pluscircleo" size={25} color="#FF6C00" style={styles.addIcon} />
+                  </TouchableHighlight>
+                  {/* <View> */}
+                  {/* <PlusCircled /> */}
+                  {/* </View> */}
+                </View>
+                <View>
+                  <Text style={styles.formTitle}>Реєстрація</Text>
+
+                  <TextInput placeholder={"Логін"} placeholderTextColor={"#BDBDBD"} value={login} inputMode={'text'} onChangeText={handleLogin} style={styles.inputText} />
+                  <TextInput placeholder={"Адреса електронної пошти"} placeholderTextColor={"#BDBDBD"} value={email} inputMode={'email'} onChangeText={handleEmail} style={styles.inputText} />
+                  <View>
+                    <TextInput placeholder={"Пароль"} placeholderTextColor={"#BDBDBD"} secureTextEntry={isShowPassword} value={password} onChangeText={handlePassword} style={styles.inputPassword} />
+                    <TouchableOpacity activeOpacity={0.8} onPress={showPassword} style={styles.showPasswordInput}>
+                      <Text style={styles.showPasswordText}>{isShowPassword ? 'Показати' : 'Приховати'}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.formRegistrButton}
+                >
+                  <Text style={styles.buttonRegistrTitle} onPress={userRegister}>Зареєструватись</Text>
+                </TouchableOpacity>
+                <TouchableOpacity activeOpacity={0.8}>
+                  <Text style={styles.loginLinkText}>Вже є аккаунт? Увійти</Text>
+                </TouchableOpacity>
+              </View>
+            </KeyboardAvoidingView>
           </View>
-        </View>
-      </ImageBackground>
-    </View >
+        </ImageBackground>
+      </View >
+    </TouchableWithoutFeedback >
   )
 }
 
@@ -168,13 +184,18 @@ const styles = StyleSheet.create({
 
   buttonRegistrTitle: {
     width: 343,
+    marginTop: 43,
     paddingVertical: 16,
     paddingHorizontal: 32,
     backgroundColor: "#FF6C00",
     textAlign: "center",
     fontSize: 16,
     lineHeight: 19,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
   },
 
   loginLinkText: {
