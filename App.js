@@ -14,7 +14,7 @@ export default function App() {
         <RegistrationScreen changeScrenn={changeScrennFunc} />}
       <StatusBar style="auto" /> */}
       <RegistrationScreen />
-      {/* <LoginScreen /> */}
+      <LoginScreen />
     </SafeAreaView>
   );
 }
