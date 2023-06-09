@@ -4,30 +4,49 @@ import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpaci
 export const CommentsScreen = () => {
 
   return (
-    <View>
-            <View style={styles.header}>
+    <View style={styles.container}>
+      <View style={styles.header}>
         <TouchableHighlight>
           <AntDesign name="arrowleft" size={24} color="#212121" style={styles.iconBack} />
         </TouchableHighlight>
         <Text style={styles.headerText}>Коментарі</Text>
       </View>
-      <View style={styles.imgBackground}>
-        <View style={styles.imgCircle}>
-          <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
+      <View style={styles.imgWrapper}>
+        <Image source={require('../assets/loadimg.png')} style={styles.imgLoaded} />
+      </View>
+      <View style={styles.commentsListWrapper}>
+        <View style={styles.commentsList}>
+          <View style={styles.commentItem}>
+            <Image source={require('../assets/user-avatar.png')} style={styles.imgAvatar} />
+            <View style={styles.commentTextWrapper}>
+              <Text style={styles.commentText}>Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!</Text>
+              <Text style={styles.commentTextDate}>09 червня, 2020 | 08:40</Text>
+            </View>
+          </View>
+
+          <View style={styles.commentItem}>
+            <Image source={require('../assets/msin-user-avatar.png')} style={styles.imgAvatar} />
+            <View style={styles.commentTextWrapper}>
+              <Text style={styles.commentText}>A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.</Text>
+              <Text style={styles.commentTextDate}>09 червня, 2020 | 09:14</Text>
+            </View>
+          </View>
+
+          <View style={styles.commentItem}>
+            <Image source={require('../assets/user-avatar.png')} style={styles.imgAvatar} />
+            <View style={styles.commentTextWrapper}>
+              <Text style={styles.commentText}>Thank you! That was very helpful!</Text>
+              <Text style={styles.commentTextDate}>09 червня, 2020 | 09:20</Text>
+            </View>
+          </View>
+          <View style={styles.inputCommentWrapper}>
+            <TextInput placeholder={"Коментувати..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputCommentText} />
+            <View style={styles.circle}></View>
+            <AntDesign name="arrowup" size={14} color="#FFFFFF" style={styles.arrowUp} />
+          </View>
+
+
         </View>
-      </View>
-      <Text style={styles.downloadText}>Завантажте фото</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput placeholder={"Назва..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputText} />
-        <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} />
-      </View>
-      <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
-        <Text style={styles.publicateText}>Опублікувати</Text>
-      </TouchableOpacity>
-      <View style={styles.deleteBtnWrapper}>
-        <TouchableHighlight style={styles.deleteBtn}>
-          <AntDesign name="delete" size={24} color="#BDBDBD" />
-        </TouchableHighlight>
       </View>
     </View>
   )
@@ -43,25 +62,9 @@ const styles = StyleSheet.create({
 
   header: {
     flexDirection: "row",
-    gap: 68,
+    gap: 110,
     alignItems: "center",
     background: "#FFFFFF",
-    // elevation: 2,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.3,
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 0.5,
-    // },
-    // shadowRadius: 1,
-    // overlay: {
-    //   position: 'absolute',
-    //   top: 0,
-    //   left: 0,
-    //   right: 0,
-    //   bottom: 0,
-    //   backgroundColor: 'rgba(255, 255, 255, 0.7)',
-    // },
   },
 
   iconBack: {
@@ -79,6 +82,100 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
+  imgWrapper: {
+    width: 383,
+    marginTop: 43,
+    alignItems: "center",
+    borderRadius: 8,
+  },
 
+  imgLoaded: {
+    width: 370,
+    borderRadius: 8,
+  },
 
-})
+  commentsListWrapper: {
+    height: '100%',
+    marginTop: 32,
+    paddingRight: 30,
+    color: "#212121",
+  },
+
+  commentsList: {
+    flex: 1,
+  },
+
+  commentItem: {
+    flexDirection: "row",
+    marginBottom: 24,
+  },
+
+  commentTextWrapper: {
+    width: 330,
+    marginLeft: 16,
+    padding: 16,
+    backgroundColor: "rgba(0, 0, 0, 0.03);",
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 6,
+    borderBottomRightRadius: 6,
+    borderBottomLeftRadius: 6,
+  },
+
+  commentText: {
+    fontSize: 13,
+    lineHeight: 18,
+    textAlign: "left",
+  },
+
+  commentTextDate: {
+    marginTop: 8,
+    fontSize: 10,
+    lineHeight: 12,
+    textAlign: "right",
+    color: "#BDBDBD",
+  },
+
+  imgAvatar: {
+    width: 28,
+    height: 28,
+  },
+
+  inputCommentWrapper: {
+    margintop: 31,
+    flex: 1,
+
+  },
+
+  inputCommentText: {
+    position: 'relative',
+    width: 373,
+    paddingVertical: 16,
+    paddingLeft: 16,
+    fontWeight: '500',
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#BDBDBD",
+    backgroundColor: "#F6F6F6",
+    borderRadius: 100,
+  },
+
+  circle: {
+    position: "absolute",
+    top: 8,
+    right: -2,
+    width: 34,
+    height: 34,
+    backgroundColor: "#FF6C00",
+    borderStyle: 'solid',
+    borderWidth: 1,
+    borderColor: '#E8E8E8',
+    borderRadius: '100%',
+  },
+
+  arrowUp: {
+    position: "absolute",
+    zIndex: 100,
+    top: 18,
+    right: 8,
+  }
+ });

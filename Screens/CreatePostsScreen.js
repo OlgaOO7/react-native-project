@@ -11,7 +11,7 @@ export const CreatePostsScreen = () => {
         </TouchableHighlight>
         <Text style={styles.headerText}>Створити публікацію</Text>
       </View>
-      <View style={styles.imgBackground}>
+      <View style={styles.imgWrapper}>
         <View style={styles.imgCircle}>
           <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
         </View>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 
-  imgBackground: {
+  imgWrapper: {
     position: "relative",
     width: 383,
     height: 240,
