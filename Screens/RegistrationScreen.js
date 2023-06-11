@@ -1,7 +1,8 @@
-import { AntDesign } from '@expo/vector-icons';
 // import { useFonts } from 'expo-font';
 import { useState } from "react";
-import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, ImageBackground, TouchableWithoutFeedback, Keyboard, Button } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { AntDesign } from '@expo/vector-icons';
+import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, ImageBackground, TouchableWithoutFeedback, Keyboard } from "react-native";
 // import { PlusCircled } from "@radix-ui/react-icons";
 
 export const RegistrationScreen = () => {
@@ -9,6 +10,8 @@ export const RegistrationScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShowPassword, setIsShowPassword] = useState(true);
+
+  const navigation = useNavigation();
 
   // const [fontsLoaded] = useFonts({
   //   'Roboto': require('../assets/fonts/Roboto.ttf'),
@@ -27,6 +30,9 @@ export const RegistrationScreen = () => {
       alert('Please enter data!');
     }
     console.log(`login: ${login}; email: ${email}; password: ${password}`);
+    navigation.navigate("Home", {
+      screen: "Posts",
+    });
     return;
   }
 
@@ -65,7 +71,7 @@ export const RegistrationScreen = () => {
                 >
                   <Text style={styles.buttonRegistrTitle} onPress={userRegister}>Зареєструватись</Text>
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8}>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("LogIn")}>
                   <Text style={styles.loginLinkText}>Вже є аккаунт? Увійти</Text>
                 </TouchableOpacity>
               </View>

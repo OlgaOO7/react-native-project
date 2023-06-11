@@ -1,22 +1,27 @@
 import { AntDesign } from '@expo/vector-icons';
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
 
 export const CreatePostsScreen = () => {
+  const [photo, setPhoto] = useState(null);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableHighlight>
+        <TouchableHighlight onPress={() => navigation.goBack()}>
           <AntDesign name="arrowleft" size={24} color="#212121" style={styles.iconBack} />
         </TouchableHighlight>
         <Text style={styles.headerText}>Створити публікацію</Text>
       </View>
+      <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+          </KeyboardAvoidingView>
       <View style={styles.imgWrapper}>
         <View style={styles.imgCircle}>
           <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
         </View>
       </View>
-      <Text style={styles.downloadText}>Завантажте фото</Text>
+      <Text style={styles.downloadText}>{!photo ? "Завантажте фото" : "Реадагувати фото"}</Text>
       <View style={styles.inputWrapper}>
         <TextInput placeholder={"Назва..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputText} />
         <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} />
@@ -24,7 +29,7 @@ export const CreatePostsScreen = () => {
       <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
         <Text style={styles.publicateText}>Опублікувати</Text>
       </TouchableOpacity>
-      <View style={styles.deleteBtnWrapper}>
+      <View style={styles.footer}>
         <TouchableHighlight style={styles.deleteBtn}>
           <AntDesign name="delete" size={24} color="#BDBDBD" />
         </TouchableHighlight>
@@ -142,7 +147,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 
-  deleteBtnWrapper: {
+  footer: {
     alignItems: "center",
   },
 
