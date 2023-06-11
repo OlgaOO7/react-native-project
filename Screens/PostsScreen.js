@@ -24,6 +24,7 @@ export const PostsScreen = () => {
         </View> */}
       </View>
     </ScrollView>
+    
   )
 };
 
