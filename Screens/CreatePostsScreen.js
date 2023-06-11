@@ -31,11 +31,11 @@ export const CreatePostsScreen = () => {
         <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
           <Text style={styles.publicateText}>Опублікувати</Text>
         </TouchableOpacity>
-        {/* <View style={styles.footer}>
+        <View style={styles.footer}>
           <TouchableHighlight style={styles.deleteBtn}>
             <AntDesign name="delete" size={24} color="#BDBDBD" />
           </TouchableHighlight>
-        </View> */}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   )

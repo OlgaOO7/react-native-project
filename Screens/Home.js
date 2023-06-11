@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { MaterialCommunityIcons, Feather, Ionicons, AntDesign } from '@expo/vector-icons';
 import { CreatePostsScreen } from "./CreatePostsScreen";
 import { PostsScreen } from "./PostsScreen";
@@ -10,7 +10,6 @@ const MainTab = createBottomTabNavigator();
 
 const Home = () => {
   const navigation = useNavigation();
-  const route = useRoute();
 
   return (
     <MainTab.Navigator initialRouteName="Posts"
@@ -48,19 +47,6 @@ const Home = () => {
                 <TouchableOpacity activeOpacity={0.8} onPres={() => navigation.navigate("PostsScreen")}>
                   <Ionicons name="grid-outline" size={24} color="rgba(33, 33, 33, 0.8)" />
                 </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("CreatePosts")} style={{
-                  width: 70,
-                  height: 40,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#FF6C00",
-                  borderRadius: 20,
-                }}>
-                  <Feather name="plus" size={24} color="#FFFFFF" />
-                </TouchableOpacity>
-                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("ProfileScreen")}>
-                  <AntDesign name="user" size={24} color="rgba(33, 33, 33, 0.8)" />
-                </TouchableOpacity>
               </View>
             );
           },
@@ -75,19 +61,58 @@ const Home = () => {
             <AntDesign name="arrowleft" size={24} color="#212121" />
           </TouchableOpacity>
         ),
-        // tabBarIcon: ({ focused, color, size }) => {
-        //   return (
-        //     <View>
-        //       <TouchableOpacity activeOpacity={0.8} onPres={() => navigation.navigate("PostsScreen")}>
-        //         <AntDesign name="delete" size={24} color="#BDBDBD" />
-        //       </TouchableOpacity>
-        //     </View>
-        //   );
-        // },
+        tabBarIcon: ({ focused, color, size }) => {
+          return (
+            <View>
+              {/* <TouchableOpacity activeOpacity={0.8} onPres={() => navigation.navigate("PostsScreen")}>
+                <AntDesign name="delete" size={24} color="#BDBDBD" />
+              </TouchableOpacity> */}
+              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("CreatePosts")} style={{
+                width: 70,
+                height: 40,
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#FF6C00",
+                borderRadius: 20,
+              }}>
+                <Feather name="plus" size={24} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+          );
+        },
       }}>
+      </MainTab.Screen>
+
+      <MainTab.Screen name="Profile" component={ProfileScreen}
+        options={{
+                  headerShown: false,
+          // tabBarStyle: { display: 'none' },
+          // headerRight: ({ focused, color, size }) => (
+          //   <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("LogIn")} style={{
+          //     paddingVertical: 11,
+          //     marginRight: 16,
+          //     background: "#FFFFFF",
+          //   }}>
+          //     <MaterialCommunityIcons name="exit-to-app" size={24} color="#BDBDBD" />
+          //   </TouchableOpacity>
+          // ),
+          tabBarIcon: ({ focused, color, size }) => {
+            return (
+              <View>
+                <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate("Profile")}>
+                  <AntDesign name="user" size={24} color="rgba(33, 33, 33, 0.8)" />
+                </TouchableOpacity>
+              </View>
+            );
+          },
+        }}>
       </MainTab.Screen>
     </MainTab.Navigator>
   )
 };
 
 export default Home;
+
+
+
+
