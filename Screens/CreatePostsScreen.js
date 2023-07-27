@@ -1,11 +1,38 @@
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, EvilIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import * as Location from "expo-location";
+import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
+import MapScreen from './MapScreen';
 
-export const CreatePostsScreen = () => {
-  // const [photo, setPhoto] = useState(false);
-  let photo = false;
+export const CreatePostsScreen = ({ navigation }) => {
+  const [isShowKeyboadr, setIsShowKeyboadr] = useState(false);
+  const [location, setLocation] = useState(null);
+    const [locationName, setLocationName] = useState('');
 
+
+    let photo = false;
+
+    useEffect(() => {
+      try {
+        (async () => {
+          let {status} = await Location.requestForegroundPermissionsAsync();
+          if (status !== "granted") {
+            console.log("Please grant location permission");
+          }
+  
+          let currentLocation = await Location.getCurrentPositionAsync({});
+          setLocation(currentLocation);
+        })();
+      } catch (error) {
+        console.log(error.message);
+      }
+    }, []);
+
+    const handleShowKeyboard = () => {
+      setIsShowKeyboadr(true);
+    };
+    
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -26,7 +53,13 @@ export const CreatePostsScreen = () => {
         <Text style={styles.downloadText}>{!photo ? "Завантажте фото" : "Реадагувати фото"}</Text>
         <View style={styles.inputWrapper}>
           <TextInput placeholder={"Назва..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputText} />
-          <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} />
+          <View style={styles.placeWrapper}>
+            <EvilIcons name="location" size={24} color="black" />
+            <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} value={locationName} onFocus={() => {
+                    handleShowKeyboard();
+                  }}
+              onChangeText={(locationName) => setLocationName(locationName)} />
+          </View>
         </View>
         <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
           <Text style={styles.publicateText}>Опублікувати</Text>
@@ -39,6 +72,100 @@ export const CreatePostsScreen = () => {
       </View>
     </TouchableWithoutFeedback>
   )
+
+  // // const [photo, setPhoto] = useState(false);
+  // const [selectedLocation, setSelectedLocation] = useState(null);
+  // const [locationName, setLocationName] = useState('');
+
+  // let photo = false;
+
+  // // const handleLocation = async() => {
+  // //   const location = await Location.getCurrentPositionAsync();
+  // //   navigation.navigation('', {      
+  // //     latitude: location.coords.latitude,
+  // //     longitude: location.coords.longitude,
+  // //   })
+  // // }
+
+  // const handleGeolocatePress = () => {
+  //   navigation.navigate('MapScreen', {
+  //     selectedLocation,
+  //     setSelectedLocation,
+  //   });
+  // };
+
+  // // Function to perform reverse geocoding and get the location name
+  // const reverseGeocode = async (latitude, longitude) => {
+  //   try {
+  //     const apiKey = 'AIzaSyC8YUO74K9Bg-Ysw3Ia5FOTuv3se79XM0Y';
+  //     const response = await axios.get(
+  //       `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
+  //     );
+  //     if (response.data.results.length > 0) {
+  //       setLocationName(response.data.results[0].formatted_address);
+  //     }
+  //   } catch (error) {
+  //     console.log('Error getting location name:', error);
+  //   }
+  // };
+
+  // // Update the location name when selectedLocation changes
+  // useEffect(() => {
+  //   if (selectedLocation) {
+  //     reverseGeocode(selectedLocation.latitude, selectedLocation.longitude);
+  //   }
+  // }, [selectedLocation]);
+
+
+  // return (
+  //   <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+  //     <View style={styles.container}>
+  //       {/* <View style={styles.header}>
+  //       <TouchableHighlight onPress={() => navigation.goBack()}>
+  //         <AntDesign name="arrowleft" size={24} color="#212121" style={styles.iconBack} />
+  //       </TouchableHighlight>
+  //       <Text style={styles.headerText}>Створити публікацію</Text>
+  //     </View> */}
+  //       <KeyboardAvoidingView
+  //         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+  //       </KeyboardAvoidingView>
+  //       <View style={styles.imgWrapper}>
+  //         <View style={styles.imgCircle}>
+  //           <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
+  //         </View>
+  //       </View>
+  //       <Text style={styles.downloadText}>{!photo ? "Завантажте фото" : "Реадагувати фото"}</Text>
+  //       <View style={styles.inputWrapper}>
+  //         <TextInput placeholder={"Назва..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputText} />
+  //         <View style={styles.placeWrapper}>
+  //           <EvilIcons name="location" size={24} color="black" />
+  //           <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} value={locationName}
+  //             onChangeText={setLocationName} />
+  //         </View>
+  //       </View>
+  //       <TouchableOpacity
+  //         onPress={handleGeolocatePress}
+  //         style={{
+  //           backgroundColor: 'white',
+  //           padding: 10,
+  //           borderRadius: 5,
+  //           borderColor: '#E8E8E8',
+  //           borderWidth: 1,
+  //         }}
+  //       >
+  //       </TouchableOpacity>
+  //       <Text>Geolocate</Text>
+  //       <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
+  //         <Text style={styles.publicateText}>Опублікувати</Text>
+  //       </TouchableOpacity>
+  //       <View style={styles.footer}>
+  //         <TouchableHighlight style={styles.deleteBtn}>
+  //           <AntDesign name="delete" size={24} color="#BDBDBD" />
+  //         </TouchableHighlight>
+  //       </View>
+  //     </View>
+  //   </TouchableWithoutFeedback>
+  // )
 };
 
 const styles = StyleSheet.create({

@@ -59,7 +59,7 @@ export const PostsScreen = () => {
                 <View style={styles.locationInfoWrapper}>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate("Map");
+                      navigation.navigate("MapScreen");
                     }}
                   >
                     <EvilIcons name="location" size={18} color="#BDBDBD" style={{ marginRight: 4 }} />
