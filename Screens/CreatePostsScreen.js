@@ -1,38 +1,73 @@
 import { AntDesign, EvilIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Location from "expo-location";
+import { Camera, CameraType } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 import { useState, useEffect } from "react";
 import { StyleSheet, View, Text, TextInput, KeyboardAvoidingView, TouchableOpacity, TouchableHighlight, Image, TouchableWithoutFeedback, Keyboard } from "react-native";
-import MapScreen from './MapScreen';
+// import MapScreen from './MapScreen';
 
 export const CreatePostsScreen = ({ navigation }) => {
   const [isShowKeyboadr, setIsShowKeyboadr] = useState(false);
   const [location, setLocation] = useState(null);
-    const [locationName, setLocationName] = useState('');
+  const [locationName, setLocationName] = useState('');
+  const [typeOfCamera, setTypeOfCamera] = useState(CameraType.back);
+  // const [cameraPermission, requestCameraPermission] = Camera.useCameraPermissions();
+  const [camera, setCamera] = useState(null);
+  const [photo, setPhoto] = useState('');
+  const [title, setTitle] = useState('');
 
+  // let photo = false;
 
-    let photo = false;
-
-    useEffect(() => {
+  const takePhoto = async () => {
+    if (camera) {
       try {
-        (async () => {
-          let {status} = await Location.requestForegroundPermissionsAsync();
-          if (status !== "granted") {
-            console.log("Please grant location permission");
-          }
-  
-          let currentLocation = await Location.getCurrentPositionAsync({});
-          setLocation(currentLocation);
-        })();
-      } catch (error) {
-        console.log(error.message);
+        await Camera.requestCameraPermissionsAsync();
+        const newPhoto = await camera.takePictureAsync();
+        console.log(newPhoto.uri);
+        setPhoto(newPhoto.uri);
+      } catch (err) {
+        console.log('Error taking photo', err);
       }
-    }, []);
+    }
+  }
+  const handleCameraReady = () => {
+    console.log("Camera is ready.");
+  };
 
-    const handleShowKeyboard = () => {
-      setIsShowKeyboadr(true);
-    };
-    
+  useEffect(() => {
+    try {
+      (async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Please grant location permission");
+        }
+
+        let currentLocation = await Location.getCurrentPositionAsync({});
+        setLocation(currentLocation);
+      })();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, []);
+
+  
+  const inputTitle = (text) => {
+    setTitle(text);
+  }
+
+
+  const handleShowKeyboard = () => {
+    setIsShowKeyboadr(true);
+  };
+  
+  const handlePost = () => {
+    if(!photo || !location || !title ) {
+      navigation.navigate('PostsScreen', { photo, location, title})
+    }
+  }
+
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -46,22 +81,31 @@ export const CreatePostsScreen = ({ navigation }) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
         </KeyboardAvoidingView>
         <View style={styles.imgWrapper}>
-          <View style={styles.imgCircle}>
-            <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
-          </View>
+
+          <Camera style={styles.camera} ref={(ref) => setCamera(ref)} type={typeOfCamera} oncameraReady={handleCameraReady}>
+            <View style={styles.takePhotoWrapper}>
+              <Image source={{ uri: photo }} style={styles.imageCamera} />
+            </View>
+            <TouchableOpacity onPress={takePhoto}>
+              <View style={styles.imgCircle}>
+                <Image source={require('../assets/camera.png')} style={styles.imageCamera} />
+              </View>
+            </TouchableOpacity>
+          </Camera>
         </View>
+
         <Text style={styles.downloadText}>{!photo ? "Завантажте фото" : "Реадагувати фото"}</Text>
         <View style={styles.inputWrapper}>
           <TextInput placeholder={"Назва..."} placeholderTextColor={"#BDBDBD"} inputMode={'text'} style={styles.inputText} />
           <View style={styles.placeWrapper}>
             <EvilIcons name="location" size={24} color="black" />
             <TextInput placeholder={"Місцевість..."} placeholderTextColor={"#BDBDBD"} inputMode={'url'} style={styles.inputText} value={locationName} onFocus={() => {
-                    handleShowKeyboard();
-                  }}
+              handleShowKeyboard();
+            }}
               onChangeText={(locationName) => setLocationName(locationName)} />
           </View>
         </View>
-        <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.publicBtn} onPress={handlePost}>
           <Text style={styles.publicateText}>Опублікувати</Text>
         </TouchableOpacity>
         <View style={styles.footer}>
@@ -224,7 +268,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderStyle: 'solid',
     borderWidth: 1,
-    borderColor: '#E8E8E8',
     borderRadius: 8,
   },
 
@@ -235,7 +278,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 100,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "transparent",
   },
 
   imageCamera: {
@@ -290,6 +333,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 20,
   },
+
+  camera: {
+    height: 240,
+  },
+
+  takePhotoWrapper: {
+    position: 'absolute',
+    top: 50,
+    left: 10,
+    borderColor: '#fff',
+    height: 200,
+    width: 200,
+
+  }
 });
+
 
 

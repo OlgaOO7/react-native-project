@@ -38,7 +38,7 @@ export const PostsScreen = () => {
                 <View style={styles.infoInnerBox}>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate("Comments", {
+                      navigation.navigate("CommentsScreen", {
                         postId: item.id,
                         photo: item.photo,
                       });
